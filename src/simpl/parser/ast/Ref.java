@@ -1,5 +1,7 @@
 package simpl.parser.ast;
 
+import simpl.interpreter.Int;
+import simpl.interpreter.IntValue;
 import simpl.interpreter.RefValue;
 import simpl.interpreter.RuntimeError;
 import simpl.interpreter.State;
@@ -22,12 +24,20 @@ public class Ref extends UnaryExpr {
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
         // TODO
-        return null;
+        TypeResult t1 = e.typecheck(E);
+        return TypeResult.of(t1.s,new RefType(t1.s.apply(t1.t)));
+        //return null;
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
         // TODO
-        return null;
+        Int p = new Int(s.p.get());
+        s.p.set(s.p.get()+1);
+        Value v1 = e.eval(s);
+        s.M.put(p.get(), v1);
+        return new RefValue(p.get());
+        
+        //return null;
     }
 }

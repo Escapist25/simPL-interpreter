@@ -1,5 +1,6 @@
 package simpl.parser.ast;
 
+import simpl.interpreter.BoolValue;
 import simpl.interpreter.IntValue;
 import simpl.interpreter.RuntimeError;
 import simpl.interpreter.State;
@@ -23,12 +24,17 @@ public class Neg extends UnaryExpr {
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
         // TODO
-        return null;
+        TypeResult t1 = e.typecheck(E);
+        Substitution sout = t1.t.unify(Type.INT);
+        return TypeResult.of(sout,Type.INT);
+        //return null;
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
         // TODO
-        return null;
+        IntValue v = (IntValue)e.eval(s);
+        return new IntValue(-v.n);
+        //return null;
     }
 }

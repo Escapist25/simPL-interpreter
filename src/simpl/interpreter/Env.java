@@ -1,6 +1,7 @@
 package simpl.interpreter;
 
 import simpl.parser.Symbol;
+import sun.net.www.content.audio.x_aiff;
 
 public class Env {
 
@@ -16,6 +17,8 @@ public class Env {
 
     public static Env empty = new Env() {
         public Value get(Symbol y) {
+            System.out.println("get symbol:" + y + " Error");
+            System.out.flush();
             return null;
         }
 
@@ -32,11 +35,17 @@ public class Env {
 
     public Value get(Symbol y) {
         // TODO
-        return null;
+        if (y.toString().equals(x.toString()))
+            return v;
+        else
+            return E.get(y);
+            
+        //return null;
     }
 
     public Env clone() {
         // TODO
-        return null;
+        return new Env(E,x,v);
+        //return null;
     }
 }

@@ -29,12 +29,18 @@ public class Fn extends Expr {
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
         // TODO
-        return null;
+        TypeVar tv1 = new TypeVar(true);
+        TypeResult t2 = e.typecheck(TypeEnv.of(E, x, tv1));
+ //System.out.println("fn: "+t2.s.apply(tv1) + "-> " + t2.s.apply(t2.t));
+ //System.out.println(t2.s);
+        return TypeResult.of(t2.s,new ArrowType(t2.s.apply(tv1),t2.s.apply(t2.t)));
+        //return null;
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
         // TODO
-        return null;
+        return new FunValue(s.E,x,e);
+        //return null;
     }
 }

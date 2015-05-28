@@ -16,6 +16,10 @@ public class PairValue extends Value {
     @Override
     public boolean equals(Object other) {
         // TODO
+        if (other instanceof PairValue){
+            PairValue t1 = (PairValue) other;
+            return t1.v1.equals(this.v1) && t1.v2.equals(this.v2); 
+        }
         return false;
     }
 }

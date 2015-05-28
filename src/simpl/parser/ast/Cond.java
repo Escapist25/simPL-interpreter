@@ -27,12 +27,41 @@ public class Cond extends Expr {
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
         // TODO
-        return null;
+        TypeResult t1 = e1.typecheck(E);
+        TypeResult t2 = e2.typecheck(t1.s.compose(E));
+        TypeResult t3 = e3.typecheck(t2.s.compose(t1.s.compose((E))));
+        Substitution sout = t3.s.compose(t2.s.compose(t1.s));
+        /*
+    System.out.println("condint1.t:"+sout.apply(t1.t));
+    System.out.println("condint2.t:"+sout.apply(t2.t));
+    System.out.println("condint3.t:"+sout.apply(t3.t));
+    */
+        Substitution s2 = sout.apply(t1.t).unify(Type.BOOL);
+        sout = sout.compose(s2);
+        Substitution s1 = sout.apply(t2.t).unify(sout.apply(t3.t));
+        sout = sout.compose(s1);
+        /*
+    System.out.println("condoutt1.t:"+sout.apply(t1.t));
+    System.out.println("condoutt2.t:"+sout.apply(t2.t));
+    System.out.println("condoutt3.t:"+sout.apply(t3.t));
+    */
+        Type tout = sout.apply(t3.t);
+        return TypeResult.of(sout,tout);
+        
+        //return null;
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
         // TODO
-        return null;
+        BoolValue v1 = (BoolValue)e1.eval(s);
+        Value v2;
+        if (v1.b == true)
+            v2 = e2.eval(s);
+        else {
+            v2 = e3.eval(s);
+        }
+        return v2;
+        //return null;
     }
 }
